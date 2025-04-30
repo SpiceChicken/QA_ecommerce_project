@@ -1,16 +1,17 @@
 from selenium.webdriver.common.by import By
+from automation.pages.base_page import BasePage
 
-class LoginPage:
+class LoginPage(BasePage):
     def __init__(self, driver):
-        self.driver = driver
+        super().__init__(driver)
         self.email_input = (By.ID, "input-email")
         self.password_input = (By.ID, "input-password")
-        self.login_button = (By.CSS_SELECTOR, "button.btn.btn-primary")
+        self.login_button = (By.CSS_SELECTOR, "input.btn.btn-primary")
 
     def load(self):
         self.driver.get("http://localhost/index.php?route=account/login")
 
     def login(self, email, password):
-        self.driver.find_element(*self.email_input).send_keys(email)
-        self.driver.find_element(*self.password_input).send_keys(password)
-        self.driver.find_element(*self.login_button).click()
+        self.type_text(self.email_input, email)
+        self.type_text(self.password_input, password)
+        self.click(self.login_button)

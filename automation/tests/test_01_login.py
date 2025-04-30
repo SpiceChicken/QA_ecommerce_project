@@ -77,17 +77,3 @@ def test_tc005_missing_password(driver):
         EC.presence_of_element_located((By.CSS_SELECTOR, ".alert-danger"))
     )
     assert "Warning" in alert.text
-
-
-# def test_login_failure(driver):
-#     # 로그인 페이지 로드
-#     login_page = LoginPage(driver)
-#     login_page.load()
-    
-#     # 잘못된 정보로 로그인 시도
-#     login_page.login("invalid@example.com", "wrongpassword")
-    
-#     # 로그인 실패 확인
-#     alert = driver.find_element(By.CSS_SELECTOR, ".alert-danger")
-    
-#     assert "Warning" in alert.text
