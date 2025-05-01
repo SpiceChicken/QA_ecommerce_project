@@ -111,7 +111,6 @@ class CheckoutPage(BasePage):
             return True
         except:
             return False
-
     def wait_for_checkout_page(self):
         """체크아웃 페이지가 완전히 로드될 때까지 대기"""
         try:
@@ -124,3 +123,4 @@ class CheckoutPage(BasePage):
             print(f"페이지 제목: {self.driver.title}")
             print(f"HTML 일부:\n{self.driver.page_source[:500]}")  # 앞부분만 출력
             return False
+
