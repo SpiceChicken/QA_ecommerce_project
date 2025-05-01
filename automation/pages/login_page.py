@@ -6,7 +6,7 @@ class LoginPage(BasePage):
         super().__init__(driver)
         self.email_input = (By.ID, "input-email")
         self.password_input = (By.ID, "input-password")
-        self.login_button = (By.CSS_SELECTOR, "input.btn.btn-primary")
+        self.login_button = (By.CSS_SELECTOR, "Button.btn-primary")
 
     def load(self):
         self.driver.get("http://localhost/index.php?route=account/login")

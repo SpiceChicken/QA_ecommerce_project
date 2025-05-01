@@ -1,13 +1,14 @@
 """
 테스트 간에 데이터를 공유하기 위한 유틸리티 모듈
 """
+import random
 
 # 테스트 데이터 저장소
 test_data = {
-    "registered_email": "testuser@example.com",
+    "registered_email": f"testuser_{random.randint(1000,9999)}@example.com",
     "registered_password": "test123",
-    "registered_first_name": "Test",
-    "registered_last_name": "User"
+    "registered_first_name": f"Test_{random.randint(1000,9999)}",
+    "registered_last_name": f"User_{random.randint(1000,9999)}",
 }
 
 def set_registered_user(email, password, first_name=None, last_name=None):

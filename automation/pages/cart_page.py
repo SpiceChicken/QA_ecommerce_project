@@ -1,6 +1,9 @@
 from selenium.webdriver.common.by import By
 from automation.pages.base_page import BasePage
 import time
+from selenium.webdriver.support.select import Select
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 class CartPage(BasePage):
     def __init__(self, driver):
@@ -11,6 +14,7 @@ class CartPage(BasePage):
         self.add_to_cart = (By.ID, "button-cart")
         self.cart_button = (By.ID, "cart")
         self.view_cart_link = (By.XPATH, "//strong[text()=' View Cart']")
+        self.checkout_link = (By.CSS_SELECTOR, "a.btn.btn-primary")
         self.cart_items = (By.ID, "output-cart")
         self.quantity_input = (By.CSS_SELECTOR, "input[name*='quantity']")
         self.update_button = (By.CSS_SELECTOR, "button[formaction*='checkout/cart.edit']")
@@ -39,6 +43,25 @@ class CartPage(BasePage):
         self.click(self.view_cart_link)
         self.wait_for_visible(self.cart_items)  # 장바구니 페이지 로딩 대기
 
+    def go_to_checkout(self):
+        """장바구니에서 체크아웃 페이지로 이동"""
+        try:
+            self.wait_for_clickable(self.checkout_link)
+            self.click(self.checkout_link)
+
+            # URL 전환 대기
+            WebDriverWait(self.driver, 20).until(EC.url_contains("checkout/checkout"))
+
+            # Checkout 페이지 주요 요소가 로딩될 때까지 대기 (예: 이름 입력란)
+            WebDriverWait(self.driver, 20).until(
+                EC.visibility_of_element_located((By.ID, "input-payment-firstname"))
+            )
+
+            return True
+        except Exception as e:
+            print(f"체크아웃 페이지 이동 실패: {str(e)}")
+            return False
+
     def get_cart_item_count(self):
         return len(self.driver.find_elements(*self.cart_items))
 
@@ -57,3 +80,16 @@ class CartPage(BasePage):
 
     def is_cart_empty(self):
         return len(self.driver.find_elements(*self.empty_message)) > 0
+
+    def select_dropdown(self, locator, index=1):
+        dropdown_element = self.wait_for_visible(locator)
+        dropdown = Select(dropdown_element)
+        
+        # 활성화된 옵션만 필터링
+        options = dropdown.options
+        enabled_options = [opt for opt in options if opt.is_enabled() and opt.get_attribute("value")]
+        
+        if len(enabled_options) > index:
+            enabled_options[index].click()
+        else:
+            raise ValueError(f"선택 가능한 드롭다운 옵션이 부족합니다 (index={index})")
